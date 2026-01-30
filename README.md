@@ -13,7 +13,8 @@ This project is currently under active development and focuses on clean architec
 - **Firebase** (Auth, Firestore, Storage – planned)
 - **Vite**
 - **Git & GitHub**
-
+- **React Hook Form**
+- **Zod   (Validation) **
 ---
 
 ## 📦 Features (Current & Planned)
