@@ -1,27 +1,34 @@
-# Auth Role Playground
 
-Practice project for Authentication and Role-Based Access Control (RBAC)
-using React, TypeScript, and Firebase.
+---
 
-## Goal
-Learning how to implement:
-- Authentication flow
-- Role-based access (admin, staff, viewer)
-- Protected routes
-- UI permissions
+## 🧠 Purpose of This Project
 
-## Features
-- Firebase Authentication (Email / Password)
-- User roles stored in Firestore
-- Route protection based on role
-- UI restrictions per role
+This project is built as a **real-world practice dashboard**, not a tutorial clone.  
+The main goals are:
 
-## Tech Stack
-- React
-- TypeScript
-- Vite
-- Firebase
-- Tailwind CSS
+- Practicing scalable React architecture
+- Working with authentication and protected routes
+- Designing maintainable front-end systems
+- Preparing a production-ready inventory system
 
-## Status
-In progress
+---
+
+## 📌 Status
+
+> ⚠️ **This project is under active development.**
+
+Features, structure, and implementation details may change as the project evolves.
+
+---
+
+## 👤 Author
+
+**Mohammad Piramun**  
+Front-End Developer  
+GitHub: https://github.com/jovanesh-pira
+
+---
+
+## 📄 License
+
+This project is for learning and portfolio purposes.

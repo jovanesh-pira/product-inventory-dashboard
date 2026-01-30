@@ -1,30 +1,19 @@
-import { useState } from "react";
-
-import { signInWithEmailAndPassword } from "firebase/auth"
-import {auth} from "@/lib/firebace"
-
+import { AuthContext } from "@/App/providers/AuthProvider"
+import { useContext } from "react"
+import LoginForm from "../components/LoginForm"
+import { Navigate } from "react-router-dom"
 function LoginPage() {
-   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const LoginEvent=async()=>{
-    setLoading(true);
-    setError(null);
-    try{ let user=await signInWithEmailAndPassword(auth,"test@test.com","Bigbang_20")
-      console.log(user)
-      console.log(user.user)
-    }catch(e:unknown){
-      const code = typeof e === "object" && e && "code" in e ? String((e as any).code) : "unknown";
-      setError(code);
-      console.error(e);
-    }finally{setLoading(false)}
-     
-  }
+  const auth =useContext(AuthContext)
+  console.log(auth?.loading)
+  if(auth?.loading) return <h1>Loading...</h1>
+  if(auth?.user) return <Navigate to="/app" replace></Navigate>
+  
   return (
     <div>
-      this is the logingpage
-      <button onClick={()=>LoginEvent()}>Login</button>
+      <LoginForm/>
     </div>
   )
 }
 
 export default LoginPage
+
