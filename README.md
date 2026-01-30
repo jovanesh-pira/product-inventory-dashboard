@@ -1,34 +1,41 @@
+# Product Inventory Dashboard (In Progress)
+
+A modern **product inventory management dashboard** built with React and TypeScript.  
+This project is currently under active development and focuses on clean architecture, scalability, and real-world workflows.
 
 ---
 
-## 🧠 Purpose of This Project
+## 🚀 Tech Stack
 
-This project is built as a **real-world practice dashboard**, not a tutorial clone.  
-The main goals are:
-
-- Practicing scalable React architecture
-- Working with authentication and protected routes
-- Designing maintainable front-end systems
-- Preparing a production-ready inventory system
-
----
-
-## 📌 Status
-
-> ⚠️ **This project is under active development.**
-
-Features, structure, and implementation details may change as the project evolves.
+- **React**
+- **TypeScript**
+- **Tailwind CSS**
+- **Firebase** (Auth, Firestore, Storage – planned)
+- **Vite**
+- **Git & GitHub**
 
 ---
 
-## 👤 Author
+## 📦 Features (Current & Planned)
 
-**Mohammad Piramun**  
-Front-End Developer  
-GitHub: https://github.com/jovanesh-pira
+### Implemented / In Progress
+- Project architecture refactor (feature-based structure)
+- Authentication flow (in progress)
+- App routing and layouts
+- Modular providers and guards
+- Dashboard foundation
+
+### Planned
+- Product CRUD (Create, Read, Update, Delete)
+- Inventory tracking
+- Firebase authentication & database integration
+- Role-based access (Admin / Manager)
+- Analytics and reporting
+- Responsive dashboard UI
 
 ---
 
-## 📄 License
+## 🧱 Project Structure
 
-This project is for learning and portfolio purposes.
+The project follows a **feature-based architecture** for better scalability and maintainability:
+
