@@ -1,6 +1,6 @@
 import type { Timestamp } from "firebase/firestore";
 import * as z from "zod"
-import {productStatusSchema,productCreateSchema} from "../shcemas/product.schema"
+import { productStatusSchema, productCreateSchema } from "../shcemas/product.schema"
 
 
 export type ProductDoc = {
@@ -13,6 +13,7 @@ export type ProductDoc = {
   status: ProductStatus;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  description: string;
 };
 
 export type Product = ProductDoc & { id: string };

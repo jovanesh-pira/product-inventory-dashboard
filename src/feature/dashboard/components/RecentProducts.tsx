@@ -1,7 +1,9 @@
 
 import type { RecentProduct } from "../service/dashboard.service";
+import { useNavigate } from "react-router-dom";
 import StockBadge from "./Badge"
 function RecentProducts({recent}:{recent:RecentProduct[]}) {
+  const navigation=useNavigate()
   return (
   <div className="rounded-2xl border border-slate-200 bg-white">
       {/* Header */}
@@ -37,8 +39,7 @@ function RecentProducts({recent}:{recent:RecentProduct[]}) {
                   key={p.id}
                   className="hover:bg-slate-50 transition cursor-pointer"
                   onClick={() => {
-                    // بعداً می‌تونی navigate کنی
-                    // navigate(`/app/products/${p.id}`)
+                          navigation(`/app/products/${p.id}`,{replace:true})
                   }}
                 >
                   <td className="px-5 py-3">

@@ -12,7 +12,8 @@ import CustomersPage from "@/feature/Customers/pages/CustomersPage";
 import AnalyticsPage from "@/feature/Analytics/pages/AnalyticsPage";
 import SettingsPage from "@/feature/Settings/pages/SettingsPage";
 import ProductCreatePage from "@/feature/Products/pages/ProductCreatePage"
-
+import ProductDetailsPage from "@/feature/Products/pages/ProductDetailsPage"
+import ProductEditPage from "@/feature/Products/pages/ProductEditPage.tsx"
 export const router = createBrowserRouter([
   {
     element: <AuthLayout />,
@@ -36,7 +37,8 @@ export const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
       { path: "products", element: <ProductsPage /> },
       { path: "products/new", element: <ProductCreatePage /> },
-      // { path: "products/:id/edit", element: <ProductEditPage /> },
+      {path: "products/:id", element: <ProductDetailsPage />},
+      { path: "products/:id/edit", element: <ProductEditPage /> },
       { path: "orders", element: <OrdersPage /> },
       { path: "customers", element: <CustomersPage /> },
       { path: "analytics", element: <AnalyticsPage /> },
