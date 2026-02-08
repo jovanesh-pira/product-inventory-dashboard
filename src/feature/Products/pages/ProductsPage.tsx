@@ -1,10 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { listAllProducts, type Product } from "../serviseces/products.firebase";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
+import { db, storage } from "@/lib/firebace";
 export default function ProductsPage() {
   const [items, setItems] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [removeModal, setRemoveModal] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null,
+  );
+  const [selectedProductName, setSelectedProductName] = useState<string | null>(
+    null,
+  );
 
   const [q, setQ] = useState("");
   const [category, setCategory] = useState<"all" | string>("all");
@@ -51,6 +61,59 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-5">
+      {removeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
+            <h3 className="text-lg font-semibold text-slate-900">
+              {`Remove product `}
+            </h3>
+
+            <p className="mt-2 text-sm text-slate-600">
+              Are you sure you want to remove this product?
+              <span className="text-red-500  bg-red-200 px-2 py-1 ml-3 font-semibold rounded-md ">
+                {selectedProductName}
+              </span>
+              <br />
+              <span className="text-red-500 font-medium">
+                This action cannot be undone.
+              </span>
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setRemoveModal(false);
+                  setSelectedProductId(null);
+                }}
+                className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={async () => {
+                  if (!selectedProductId) return;
+
+                  try {
+                    await handleRemoveProduct(selectedProductId);
+                    setRemoveModal(false);
+                    setSelectedProductId(null);
+                    setItems(
+                      items.filter((elm) => elm.id !== selectedProductId),
+                    );
+                  } catch {
+                    alert("Failed to remove product");
+                  }
+                }}
+                className="rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold text-slate-900">Products</h1>
@@ -60,7 +123,6 @@ export default function ProductsPage() {
         <Link
           to="/app/products/new"
           className="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition"
-          
         >
           Add product
         </Link>
@@ -134,20 +196,24 @@ export default function ProductsPage() {
                   <th className="px-4 py-3 font-semibold">Price</th>
                   <th className="px-4 py-3 font-semibold">Stock</th>
                   <th className="px-4 py-3 font-semibold">Status</th>
+                  <th className="px-4 py-3 font-semibold">actions</th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-slate-200">
                 {filtered.map((p) => (
-                  
                   <tr key={p.id} className="hover:bg-slate-50/60">
                     <td className="px-4 py-3">
-                      
                       {p.imageUrl ? (
-                                      <img src={p.imageUrl} alt={p.name} className="w-10 h-10 rounded-lg object-cover" loading="lazy" />
-                                    ) : (
-                                      <div className="w-10 h-10 rounded-lg bg-slate-100" />
-                                                          )}
+                        <img
+                          src={p.imageUrl}
+                          alt={p.name}
+                          className="w-10 h-10 rounded-lg object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg bg-slate-100" />
+                      )}
 
                       <p className="font-semibold text-slate-900">{p.name}</p>
                       <p className="text-xs text-slate-500">SKU: {p.sku}</p>
@@ -162,6 +228,27 @@ export default function ProductsPage() {
                         {p.status}
                       </span>
                     </td>
+                    <td className="px-4 py-3">
+                      <div className="inline-flex items-center gap-4">
+                        <button
+                          onClick={() => {
+                            setSelectedProductId(p.id);
+                            setRemoveModal(true);
+                            setSelectedProductName(p.name);
+                          }}
+                          className="text-sm font-medium text-red-600 hover:text-red-700"
+                        >
+                          Remove
+                        </button>
+
+                        <Link
+                          to={`/app/products/${p.id}/edit`}
+                          className="text-sm text-slate-600 hover:text-slate-900"
+                        >
+                          Edit
+                        </Link>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -171,4 +258,32 @@ export default function ProductsPage() {
       </div>
     </div>
   );
+}
+
+async function handleRemoveProduct(productId: string) {
+  try {
+    // 1️⃣ اول سند محصول رو بگیر (برای imagePath)
+    const docRef = doc(db, "products", productId);
+    const snap = await getDoc(docRef);
+
+    if (!snap.exists()) {
+      throw new Error("Product not found");
+    }
+
+    const data = snap.data();
+
+    // 2️⃣ اگر تصویر داشت → از Storage حذف کن
+    if (data?.imagePath) {
+      const imageRef = ref(storage, data.imagePath);
+      await deleteObject(imageRef);
+    }
+
+    // 3️⃣ بعد خود محصول رو از Firestore حذف کن
+    await deleteDoc(docRef);
+
+    console.log("Product removed successfully:", productId);
+  } catch (err) {
+    console.error("Failed to remove product:", err);
+    throw err; // برای اینکه UI بفهمه خطا بوده
+  }
 }

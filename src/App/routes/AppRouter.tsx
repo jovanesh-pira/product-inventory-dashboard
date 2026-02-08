@@ -1,4 +1,8 @@
-import { createBrowserRouter, Navigate ,RouterProvider} from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import AppLayout from "@/App/layouts/AppLayout";
 import AuthLayout from "@/App/layouts/AuthLayout";
 import LoginPage from "@/feature/Auth/pages/LoginPage";
@@ -11,9 +15,9 @@ import OrdersPage from "@/feature/Orders/pages/OrdersPage";
 import CustomersPage from "@/feature/Customers/pages/CustomersPage";
 import AnalyticsPage from "@/feature/Analytics/pages/AnalyticsPage";
 import SettingsPage from "@/feature/Settings/pages/SettingsPage";
-import ProductCreatePage from "@/feature/Products/pages/ProductCreatePage"
-import ProductDetailsPage from "@/feature/Products/pages/ProductDetailsPage"
-import ProductEditPage from "@/feature/Products/pages/ProductEditPage.tsx"
+import ProductCreatePage from "@/feature/Products/pages/ProductCreatePage";
+import ProductDetailsPage from "@/feature/Products/pages/ProductDetailsPage";
+import ProductEditPage_v2 from "@/feature/Products/pages/ProductEditPage_v2";
 export const router = createBrowserRouter([
   {
     element: <AuthLayout />,
@@ -31,14 +35,13 @@ export const router = createBrowserRouter([
       </AuthRequired>
     ),
     children: [
-      
       { index: true, element: <Navigate to="/app/dashboard" replace /> },
 
       { path: "dashboard", element: <DashboardPage /> },
       { path: "products", element: <ProductsPage /> },
       { path: "products/new", element: <ProductCreatePage /> },
-      {path: "products/:id", element: <ProductDetailsPage />},
-      { path: "products/:id/edit", element: <ProductEditPage /> },
+      { path: "products/:id", element: <ProductDetailsPage /> },
+      { path: "products/:id/edit", element: <ProductEditPage_v2 /> },
       { path: "orders", element: <OrdersPage /> },
       { path: "customers", element: <CustomersPage /> },
       { path: "analytics", element: <AnalyticsPage /> },
@@ -50,14 +53,8 @@ export const router = createBrowserRouter([
   { path: "*", element: <div>Not Found</div> },
 ]);
 
-
-
-
-
 function AppRouter() {
-  return (
-   <RouterProvider router={router}></RouterProvider>
-  )
+  return <RouterProvider router={router}></RouterProvider>;
 }
 
-export default AppRouter
+export default AppRouter;
