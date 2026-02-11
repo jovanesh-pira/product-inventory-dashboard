@@ -3,7 +3,6 @@ import { seedOrdersFromProducts } from "../api/order.api";
 
 export default function OrdersSeedPage() {
   const [loading, setLoading] = useState(false);
-  const [createdIds, setCreatedIds] = useState<string[]>([]);
   const [done, setDone] = useState(false);
   async function seed(count = 10) {
     try {

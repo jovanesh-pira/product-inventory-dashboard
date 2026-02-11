@@ -5,10 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   type ProductCreateFormValues,
-  type ProductBase,
 } from "@/feature/Products/models/product.types";
 import { productCreateSchema } from "@/feature/Products/models/product.schema";
-import type { ProductCreateInput } from "../types/types";
+import type { ProductCreateInput } from "@/feature/Products/models/product.types";
 import { useCreateProduct } from "../hooks/useCreateProduct";
 
 export default function ProductCreatePage() {
@@ -35,8 +34,9 @@ export default function ProductCreatePage() {
     },
   });
 
-  const onSubmit = async (values: ProductCreateInput) => {
-    await createProduct(values);
+  const onSubmit = async (values: ProductCreateFormValues) => {
+    const parsed = productCreateSchema.parse(values) as ProductCreateInput;
+    await createProduct(parsed);
     navigate("/app/products", { replace: true });
   };
 

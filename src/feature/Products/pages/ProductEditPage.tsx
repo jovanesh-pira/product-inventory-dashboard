@@ -7,7 +7,6 @@ import {
   deleteObject,
   getDownloadURL,
   ref,
-  uploadBytes,
   uploadBytesResumable,
 } from "firebase/storage";
 import { db, storage } from "@/lib/firebace";
@@ -23,6 +22,7 @@ import { CreateProductSchema_v2 } from "../shcemas/product.schema";
 
 function ProductEditPage() {
   const [uploadPct, setUploadPct] = useState(0);
+  const [loadingDoc, setLoadingDoc] = useState(true);
   let DEFAULT_IMAGE_URL = "/placeholder_image.png";
   let navigation = useNavigate();
   const [product, setProduct] = useState<Omit<ProductDomainType, "id"> | null>(
@@ -45,6 +45,7 @@ function ProductEditPage() {
   useEffect(() => {
     let getProduct_single = async () => {
       try {
+        setLoadingDoc(true);
         let refDoc = doc(db, "products", ID);
         let product_snap = await getDoc(refDoc);
         if (!product_snap.exists()) {
@@ -69,6 +70,7 @@ function ProductEditPage() {
       } catch (err) {
         console.log(err);
       } finally {
+        setLoadingDoc(false);
       }
     };
     getProduct_single();
@@ -102,13 +104,13 @@ function ProductEditPage() {
       updatedAt: serverTimestamp(),
     });
 
-    if (product?.imagePath) {
+    if (newUploaded?.path && product?.imagePath && newUploaded.path !== product.imagePath) {
       await deleteObject(ref(storage, product?.imagePath));
     }
     navigation("/app/products", { replace: true });
   };
 
-  if (isLoadingDoc) {
+  if (loadingDoc) {
     return (
       <div className="p-6">
         <div className="mx-auto max-w-5xl space-y-4">

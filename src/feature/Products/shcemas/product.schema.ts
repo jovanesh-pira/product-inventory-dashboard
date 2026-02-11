@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import { string, z } from "zod";
+import { z } from "zod";
 
 export const productStatusSchema = z.enum(["active", "draft", "archived"]);
 

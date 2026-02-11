@@ -2,8 +2,8 @@
 // get single order with ID
 import { useParams } from "react-router-dom";
 import { type OrderStatus } from "../model/orders.types";
-import React, { useEffect, useState } from "react";
-import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebace";
 import type { OrderDomain } from "../model/order.schema";
 import { orderDomainSchema } from "../model/order.schema";
@@ -96,6 +96,12 @@ function OrderDetailsPage() {
           Back
         </button>
       </div>
+
+      {error && (
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="rounded-2xl border bg-white p-4 space-y-2">

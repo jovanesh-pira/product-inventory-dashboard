@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ProductCreateInput } from "../types/product.types";
+import type { ProductCreateInput } from "../models/product.types";
 import { createProductDoc, uploadProductImage } from "../api/products.api";
 
 type UseCreateProductResult = {

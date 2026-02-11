@@ -21,7 +21,12 @@ export type ProductBase = z.infer<typeof productBaseSchema>;
 /**
  * Form values for creating a product (used with react-hook-form)
  */
-export type ProductCreateFormValues = z.infer<typeof productCreateSchema>;
+export type ProductCreateFormValues = z.input<typeof productCreateSchema>;
+
+/**
+ * Parsed input for creating a product (after Zod parsing/coercion)
+ */
+export type ProductCreateInput = z.output<typeof productCreateSchema>;
 
 /**
  * Input type for updating a product

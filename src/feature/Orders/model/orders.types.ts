@@ -1,4 +1,4 @@
-import { serverTimestamp,Timestamp  } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 export type OrderStatus = "pending" | "paid" | "shipped" | "cancelled";
 export type OrderSource = "online" | "manual" | "seed";
@@ -16,28 +16,23 @@ export type CustomerInfo = {
   phone?: string;
 };
 
-
-
-
 export type CartItem = {
   productId: string;
   name: string;
   price: number;
-  stock: number;    
+  stock: number;
   imageUrl?: string | null;
   qty: number;
-  subtotal: number; }
-
+  subtotal: number;
+};
 
 export type CustomerSnapshot = {
-  id?: string;      
+  id?: string;
   name: string;
   email: string;
   phone?: string;
   avatar?: string;
 };
-
-
 
 export type CustomerDoc = {
   name: string;
@@ -46,48 +41,36 @@ export type CustomerDoc = {
   avatar?: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
-   lastOrderAt?: Timestamp ;
-  ordersCount?: number
+  lastOrderAt?: Timestamp;
+  ordersCount?: number;
 };
-
 
 export type OrderDoc = {
   customer: CustomerSnapshot;
-  items: Array<{
-    productId: string;
-    name: string;
-    price: number;
-    qty: number;
-    subtotal: number;
-  }>;
+  items: OrderItem[];
   totalPrice: number;
-  status: OrderStatus
-  source: "manual" 
-  createdAt: Timestamp; 
-  inventoryApplied: boolean; 
+  status: OrderStatus;
+  source: "manual";
+  createdAt: Timestamp;
+  inventoryApplied: boolean;
 };
 
+export type OrderMainItem = {
+  productId: string;
+  name: string;
+  price: number;
+  qty: number;
+  subtotal: number;
+  imageUrl?: string | null;
+};
 
-
-export type OrderMain={
-  customerId: string,
+export type OrderMain = {
+  customerId: string;
   customer: CustomerDoc;
-  items: [
-    {
-      productId,
-      name,
-      price,
-      qty,
-      subtotal,
-      imageUrl,     // ✅ همین “عکس” برای فهم بهتر
-    }
-  ],
-  totalPrice: number,
-  status: "pending" | "paid" | "cancelled",
-  source: "manual" | "pos" | "website",
-  createdAt,
-  updatedAt
-}
-
-
-
+  items: OrderMainItem[];
+  totalPrice: number;
+  status: OrderStatus;
+  source: "manual" | "pos" | "website";
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+};
