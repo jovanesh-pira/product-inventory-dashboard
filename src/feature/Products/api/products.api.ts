@@ -41,3 +41,26 @@ export async function createProductDoc(input: {
 
   return docRef;
 }
+
+export async function seedProducts(count = 10) {
+  const col = collection(db, "products");
+
+  for (let i = 1; i <= count; i++) {
+    await addDoc(col, {
+      name: `Product_${i}`,
+      sku: `sku-${100 + i}`,
+      category: "product",
+      stock: 10,
+      price: 100 * i,
+      description: "Seed product",
+      status: "active",
+      imageUrl: null,
+      imagePath: null,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+  }
+}
+
+
+

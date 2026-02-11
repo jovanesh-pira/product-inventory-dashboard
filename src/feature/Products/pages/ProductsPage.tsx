@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import { db, storage } from "@/lib/firebace";
+import { seedProducts } from "../api/products.api";
 export default function ProductsPage() {
   const [items, setItems] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -120,12 +121,22 @@ export default function ProductsPage() {
           <p className="text-sm text-slate-500">Loaded from Firestore</p>
         </div>
 
-        <Link
-          to="/app/products/new"
-          className="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition"
-        >
-          Add product
-        </Link>
+        <div className="flex flex-row space-x-9">
+          <Link
+            to="/app/products/new"
+            className="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition"
+          >
+            Add product
+          </Link>
+          <button
+            className="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition cursor-pointer"
+            onClick={() => {
+              seedProducts(10);
+            }}
+          >
+            SeedProducts
+          </button>
+        </div>
       </div>
 
       <div className="rounded-2xl border border-slate-200 bg-white p-4">

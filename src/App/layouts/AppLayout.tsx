@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink, Outlet,Link } from "react-router-dom";
+import { NavLink, Outlet, Link } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import { LogOut } from "@/feature/Auth/services/sevices.firebase";
 
@@ -35,7 +35,7 @@ function AppLayout() {
             </div>
           </div>
         </div>
-        
+
         {/* User */}
         <div className="px-5 py-4 border-b border-slate-800">
           <div className="flex items-center gap-3">
@@ -60,9 +60,7 @@ function AppLayout() {
 
         {/* Nav */}
         <nav className="px-3 py-3 flex-1 overflow-auto">
-          <p className="px-3 pb-2 text-xs font-semibold text-slate-400">
-            MENU
-          </p>
+          <p className="px-3 pb-2 text-xs font-semibold text-slate-400">MENU</p>
 
           <ul className="space-y-1">
             {navItems.map((item) => (
@@ -95,29 +93,31 @@ function AppLayout() {
         </nav>
 
         {/* btns for the login and logout */}
-        {auth?.user ? <div className="px-5 py-4 border-t border-slate-800">
-          <button
-            onClick={LogOutHandler}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 transition text-sm font-medium"
-          >
-            <span className="w-2 h-2 rounded-full bg-red-400" />
-            Logout
-          </button>
-        </div>:<div className="px-5 py-4 border-t border-slate-800">
-          <Link
-            to="/login"
-            onClick={LogOutHandler}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 transition text-sm font-medium"
-          >
-            
-            login
-          </Link>
-        </div>}
-        
+        {auth?.user ? (
+          <div className="px-5 py-4 border-t border-slate-800">
+            <button
+              onClick={LogOutHandler}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 transition text-sm font-medium"
+            >
+              <span className="w-2 h-2 rounded-full bg-red-400" />
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div className="px-5 py-4 border-t border-slate-800">
+            <Link
+              to="/login"
+              onClick={LogOutHandler}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 transition text-sm font-medium"
+            >
+              login
+            </Link>
+          </div>
+        )}
       </aside>
 
       {/* Main */}
-      <main className="flex-1 h-full bg-slate-50">
+      <main className="flex-1 h-full flex flex-col bg-slate-50 overflow-hidden ">
         <div className="px-6 py-5 border-b border-slate-200 bg-white">
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -140,7 +140,7 @@ function AppLayout() {
           </div>
         </div>
 
-        <div className="px-6 py-5">
+        <div className="flex-1 overflow-y-auto px-6 py-5">
           <Outlet />
         </div>
       </main>
