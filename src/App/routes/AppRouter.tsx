@@ -21,6 +21,7 @@ import ProductEditPage_v2 from "@/feature/Products/pages/ProductEditPage_v2";
 import OrderDetailsPage from "@/feature/Orders/pages/OrderDetailsPage";
 import OrdersSeedPage from "@/feature/Orders/pages/OrdersSeedPage";
 import CreateOrder from "@/feature/Orders/pages/CreateOrder";
+import OrderList_v2 from "@/feature/Orders/pages/OrderList_v2"
 export const router = createBrowserRouter([
   {
     element: <AuthLayout />,
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
       { path: "products/:id", element: <ProductDetailsPage /> },
       { path: "products/:id/edit", element: <ProductEditPage_v2 /> },
       { path: "orders", element: <OrdersListPage /> },
+      // { path: "orders", element: <OrderList_v2 /> },
       { path: "orders/seed", element: <OrdersSeedPage /> },
       { path: "orders/new", element: <CreateOrder /> },
       { path: "orders/:id", element: <OrderDetailsPage /> },

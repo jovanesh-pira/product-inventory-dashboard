@@ -19,7 +19,7 @@ import { db } from "@/lib/firebace";
 import { orderDomainSchema } from "../model/order.schema";
 
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 5;
 
 export default function OrdersListPage() {
   const ordersCol = collection(db, "orders");
@@ -51,10 +51,11 @@ export default function OrdersListPage() {
     setHistory([]);
     setHasPrev(false);
 
-    const q = query(ordersCol, orderBy("createdAt", "desc"), limit(PAGE_SIZE));
+    const q = query(ordersCol, orderBy("createdAt", "desc"), limit(PAGE_SIZE+1));
 
     const snap = await getDocs(q);
-    const docs = snap.docs;
+    let docs = snap.docs;
+   docs=snap.size>PAGE_SIZE?docs.slice(0,PAGE_SIZE):docs
 
     const list = docs.map((d) =>
       orderDomainSchema.parse({ id: d.id, ...d.data() }),
@@ -64,11 +65,11 @@ export default function OrdersListPage() {
     setFirstDoc(docs[0] ?? null);
     setLastDoc(docs[docs.length - 1] ?? null);
 
-    
-    setHasNext(docs.length === PAGE_SIZE);
+   console.log("docs.length",docs.length)    
+    setHasNext(snap.size>PAGE_SIZE);
     setLoading(false);
   }
-
+// Next -----------------------------
   async function nextPage() {
     if (!lastDoc || !hasNext) return;
 
@@ -87,7 +88,10 @@ export default function OrdersListPage() {
 
     const snap = await getDocs(q);
     const docs = snap.docs;
-
+   if(!snap || docs.length===0) {
+    setHasNext(false)
+    return
+   }
     const list = docs.map((d) =>
       orderDomainSchema.parse({ id: d.id, ...d.data() }),
     );
@@ -98,7 +102,7 @@ export default function OrdersListPage() {
 
     setPage((p) => p + 1);
     setHasPrev(true);
-    setHasNext(docs.length === PAGE_SIZE);
+    setHasNext(docs.length > PAGE_SIZE);
 
     setPaging(false);
   }
@@ -169,24 +173,10 @@ export default function OrdersListPage() {
 
         <div className="flex gap-2">
           <Link
-            to="/app/customers/new"
-            className="rounded-xl border px-4 py-2 text-sm hover:bg-gray-50"
-          >
-            Create Customer
-          </Link>
-
-          <Link
             to="/app/orders/new"
             className="rounded-xl bg-black text-white px-4 py-2 text-sm hover:opacity-90"
           >
             Create Order
-          </Link>
-
-          <Link
-            to="/app/orders/seed"
-            className="rounded-xl border px-4 py-2 text-sm hover:bg-gray-50"
-          >
-            Seed Orders
           </Link>
         </div>
       </div>

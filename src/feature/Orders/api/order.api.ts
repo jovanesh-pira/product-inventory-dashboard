@@ -9,9 +9,15 @@ import {
   limit,
   orderBy,
   query,
+  QueryDocumentSnapshot,
   runTransaction,
   serverTimestamp,
+  startAfter,
+  startAt,
+  limitToLast,
+  endBefore,
   updateDoc,
+  type DocumentData
 } from "firebase/firestore";
 
 import { db } from "@/lib/firebace";
@@ -421,4 +427,73 @@ export function inc(productId: string,setCart: SetCart) {
 
     return next;
   });
+}
+
+
+
+export async function Order_page_next(params:{
+  item_per_page:number
+  lastItem:QueryDocumentSnapshot<DocumentData> | null
+}){
+  // just get orders by query 
+  let {lastItem,item_per_page}=params
+  let doc_collection=collection(db,"orders")
+  let q=
+  lastItem ?query(doc_collection,orderBy("createdAt","desc"),startAfter(lastItem),limit(item_per_page)):
+  query(doc_collection,orderBy("createdAt","desc"),limit(item_per_page)) //----------> this one is for the firstime we get the order and this will be page one 1 default
+  let snap_orders=await getDocs(q)
+  // need return list of items ? or what 
+  let list_of_orders=snap_orders.docs.map(item=>{
+    return orderDomainSchema.parse({
+      id:item.id,
+      ...item.data()
+    })
+  })
+  let last_item=snap_orders.docs[snap_orders.docs.length-1] ?? null
+  let first_item=snap_orders.docs[0]??null
+  console.log("this is the first one Data:",first_item.data())
+  let can_iGo_Next=snap_orders.docs.length >= item_per_page
+  return {
+    list_of_orders,
+    last_item,
+    can_iGo_Next,first_item
+  }
+  
+}
+
+
+export async function Order_page_prev(params:{
+  item_per_page:number
+  firstItem:QueryDocumentSnapshot<DocumentData> | null
+}){
+  let {item_per_page,firstItem}=params
+   if (!firstItem) {
+    return {
+      list_of_orders: [],
+      first_item: null,
+      last_item: null,
+      can_iGo_Prev: false,
+      can_iGo_Next: false,
+    };
+  }
+  let doc_collection=collection(db,"orders")   
+  let q=query(doc_collection, orderBy("createdAt","desc"), endBefore(firstItem), limitToLast(item_per_page))
+  let snap_orders=await getDocs(q)
+  // need return list of items ? or what 
+  let list_of_orders=snap_orders.docs.map(item=>{
+    return orderDomainSchema.parse({
+      id:item.id,
+      ...item.data()
+    })
+  })
+  let last_item=snap_orders.docs[snap_orders.docs.length-1] ?? null
+  let first_item=snap_orders.docs[0]??null
+  let can_iGo_Next=snap_orders.docs.length >= item_per_page
+  let can_iGo_Prev = snap_orders.size > 0;
+  return {
+    list_of_orders,
+    last_item,
+    can_iGo_Next,first_item,
+    can_iGo_Prev
+  }
 }
